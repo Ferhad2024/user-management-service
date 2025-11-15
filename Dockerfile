@@ -9,6 +9,9 @@ COPY build.gradle .
 COPY settings.gradle .
 COPY src ./src
 
+# gradlew-ə icazə ver
+RUN chmod +x gradlew
+
 # Build JAR
 RUN ./gradlew build -x test
 
