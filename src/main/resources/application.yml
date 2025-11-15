@@ -5,6 +5,11 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
+  jpa:
+    hibernate:
+      ddl-auto: update   # <- burada əlavə etdik
+    show-sql: true        # <- istəyə görə SQL sorğularını konsolda görmək üçün
+
   data:
     redis:
       host: ${REDIS_HOST}
