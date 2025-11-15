@@ -10,6 +10,12 @@ spring:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
 
+  rabbitmq:
+    addresses: ${RABBITMQ_URL}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+    virtual-host: ${RABBITMQ_VHOST}
+
 app:
   jwt:
     access-token-expiration-ms: ${JWT_ACCESS_TOKEN_EXPIRATION_MS}
