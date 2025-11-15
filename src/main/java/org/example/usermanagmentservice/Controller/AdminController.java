@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/app/dashboard")
 @RequiredArgsConstructor
 @Validated
-@CrossOrigin(origins = {"http://localhost:5500", "http://127.0.0.1:5500"}, allowCredentials = "true")
+@CrossOrigin(origins = "https://txt-dowland.netlify.app")
 public class AdminController {
 
     private final UserServiceImpl userService;
