@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qeydiyyat</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg,#6e8efb,#a777e3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .card {
+        background: #fff;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        width: 100%;
+        max-width: 450px;
+        text-align: center;
+    }
+    h2 {
+        margin-bottom: 25px;
+        color: #333;
+    }
+    input, select {
+        width: 100%;
+        padding: 12px 10px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+    button {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        background: #6e8efb;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    button:hover {
+        background: #5a76d1;
+    }
+    p {
+        margin-top: 20px;
+        font-size: 14px;
+    }
+    a {
+        color: #a777e3;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+<div class="card">
+    <h2>Qeydiyyat Formu</h2>
+    <form id="registerForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="text" id="fullname" placeholder="Fullname" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <select id="roleName">
+            <option value="USER">USER</option>
+            <option value="ADMIN">ADMIN</option>
+        </select>
+        <button type="submit">Qeydiyyat</button>
+    </form>
+    <p>Artıq istifadəçi varsa? <a href="login.html">Login</a></p>
+</div>
+
+<script>
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const data = {
+        username: document.getElementById('username').value,
+        fullname: document.getElementById('fullname').value,
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value,
+        roleName: document.getElementById('roleName').value
+    };
+
+    try {
+        const response = await fetch('http://localhost:8080/app/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            const tokens = await response.json();
+            localStorage.setItem('accessToken', tokens.access);
+            localStorage.setItem('refreshToken', tokens.refresh);
+            alert('Qeydiyyat uğurla tamamlandı!');
+            window.location.href = 'texts.html';
+        } else {
+            const err = await response.json();
+            alert('Xəta: ' + (err.message || 'Qeydiyyat alınmadı'));
+        }
+    } catch (error) {
+        alert('Xəta: ' + error.message);
+    }
+});
+</script>
+</body>
+</html>

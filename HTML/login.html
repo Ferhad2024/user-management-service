@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg,#6e8efb,#a777e3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .card {
+        background: #fff;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+    h2 {
+        margin-bottom: 25px;
+        color: #333;
+    }
+    input {
+        width: 100%;
+        padding: 12px 10px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+    button {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        background: #6e8efb;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    button:hover {
+        background: #5a76d1;
+    }
+    p {
+        margin-top: 20px;
+        font-size: 14px;
+    }
+    a {
+        color: #a777e3;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+<div class="card">
+    <h2>Login Formu</h2>
+    <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+    <p>Hələ istifadəçi deyilsiniz? <a href="register.html">Qeydiyyat</a></p>
+</div>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const data = {
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value
+    };
+
+    try {
+        const response = await fetch('http://localhost:8080/app/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            const tokens = await response.json();
+            localStorage.setItem('accessToken', tokens.access);
+            localStorage.setItem('refreshToken', tokens.refresh);
+            alert('Login uğurla tamamlandı!');
+            window.location.href = 'texts.html';
+        } else {
+            const err = await response.json();
+            alert('Xəta: ' + (err.message || 'Login alınmadı'));
+        }
+    } catch (error) {
+        alert('Xəta: ' + error.message);
+    }
+});
+</script>
+</body>
+</html>
