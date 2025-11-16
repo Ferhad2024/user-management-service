@@ -42,7 +42,8 @@ public class SecurityConfig {
                     var corsCfg = new CorsConfiguration();
                     corsCfg.setAllowedOrigins(List.of(
                             "http://localhost:5500",
-                            "http://127.0.0.1:5500"
+                            "http://127.0.0.1:5500",
+                        "https://txt-dowland.netlify.app"
                     ));
                     corsCfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
                     corsCfg.setAllowedHeaders(List.of("*"));
