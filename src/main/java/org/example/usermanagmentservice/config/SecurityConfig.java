@@ -38,33 +38,27 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(request -> {
-                    var corsCfg = new CorsConfiguration();
-                    corsCfg.setAllowedOrigins(List.of(
-                            "http://localhost:5500",
-                            "http://127.0.0.1:5500",
-                        "https://txt-dowland.netlify.app"
-                    ));
-                    corsCfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
-                    corsCfg.setAllowedHeaders(List.of("*"));
-                    corsCfg.setAllowCredentials(true); // refresh token cookie üçün vacibdir
-                    return corsCfg;
-                }))
+//                .cors(cors -> cors.configurationSource(request -> {
+//                    var corsCfg = new CorsConfiguration();
+//                    corsCfg.setAllowedOrigins(List.of(
+//                            "http://localhost:5500",
+//                            "http://127.0.0.1:5500",
+//                        "https://txt-dowland.netlify.app"
+//                    ));
+//                    corsCfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+//                    corsCfg.setAllowedHeaders(List.of("*"));
+//                    corsCfg.setAllowCredentials(true); // refresh token cookie üçün vacibdir
+//                    return corsCfg;
+//                }))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // public endpoints
                         .requestMatchers("/js/**", "/css/**", "/images/**", "/favicon.ico").permitAll()
-                        .requestMatchers("/", "/index.html", "/login.html", "/register.html").permitAll()
+                        .requestMatchers("/", "/texts.html","/textList.html","/admin.html", "/login.html", "/register.html").permitAll()
                         .requestMatchers("/app/auth/**").permitAll()
-
-                        // authenticated users
                         .requestMatchers("/app/dashboard/images/**").authenticated()
-
-                        // ADMIN only
-                        .requestMatchers("/app/dashboard/**").hasRole("ADMIN")
-
-                        // bütün digər endpoint-lər
+                        .requestMatchers("/app/admin/dashboard/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(daoAuthenticationProvider())

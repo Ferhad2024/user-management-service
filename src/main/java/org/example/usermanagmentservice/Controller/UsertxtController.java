@@ -17,7 +17,6 @@ import java.util.List;
 @RequestMapping("/app/dashboard/images")
 @RequiredArgsConstructor
 @Validated
-@CrossOrigin(origins = "https://txt-dowland.netlify.app")
 public class UsertxtController {
 
     private final UserTxtService textService;

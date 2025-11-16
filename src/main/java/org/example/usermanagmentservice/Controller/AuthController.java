@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/app/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "https://txt-dowland.netlify.app")
 public class AuthController {
 
     private final AuthService authService;

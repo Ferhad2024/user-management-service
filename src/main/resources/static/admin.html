@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg,#6e8efb,#a777e3);
+        padding: 40px;
+        margin: 0;
+        min-height: 100vh;
+    }
+    h2 {
+        text-align: center;
+        color: #fff;
+        margin-bottom: 30px;
+        text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+    }
+    #userList {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+    }
+    .card span {
+        font-weight: 600;
+        font-size: 16px;
+        color: #333;
+    }
+    button {
+        background: #e74c3c;
+        color: #fff;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.2s;
+    }
+    button:hover {
+        background: #c0392b;
+    }
+</style>
+</head>
+<body>
+<h2>Admin Panel - İstifadəçilər</h2>
+<div id="userList"></div>
+
+<script>
+const API_BASE = "/app/dashboard";
+let token = localStorage.getItem("accessToken"); // accessToken istifadə et
+
+async function fetchUsers(){
+    try{
+        let resp = await fetch(API_BASE, {
+            headers: { "Authorization": "Bearer " + token }
+        });
+        if(!resp.ok){ alert("İstifadəçilər yüklənmədi"); return; }
+        let users = await resp.json();
+        let listDiv = document.getElementById("userList");
+        listDiv.innerHTML = "";
+
+        users.forEach(u=>{
+            let div = document.createElement("div");
+            div.className = "card";
+            div.innerHTML = `<span>${u.username} (${u.role})</span>`;
+            
+            let btn = document.createElement("button");
+            btn.innerText = "Deactivate";
+            btn.onclick = ()=>deactivateUser(u.id);
+            div.appendChild(btn);
+
+            listDiv.appendChild(div);
+        });
+    } catch(e){
+        alert("Serverə qoşulmaq mümkün olmadı!");
+        console.error(e);
+    }
+}
+
+async function deactivateUser(id){
+    if(!confirm("Bu istifadəçini deaktiv etmək istədiyinizə əminsiniz?")) return;
+    let resp = await fetch(`${API_BASE}/${id}/deactivate`, {
+        method:"DELETE",
+        headers: { "Authorization": "Bearer " + token }
+    });
+    if(resp.ok){
+        alert("İstifadəçi deaktiv edildi!");
+        fetchUsers();
+    } else {
+        alert("Xəta baş verdi!");
+    }
+}
+
+fetchUsers();
+</script>
+</body>
+</html>
